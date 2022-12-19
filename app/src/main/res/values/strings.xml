@@ -1,10 +1,7 @@
 <resources>
-    <string name="app_name">Noyepad</string>
+    <string name="app_name">Text Editor</string>
     <string name="file">FILE</string>
     <string name="c_new">NEW</string>
     <string name="open">OPEN</string>
     <string name="save">SAVE</string>
-    <string name="settings">SETTINGS</string>
-    <string name="about">ABOUT</string>
-    <string name="copyleft">🄯2021–2022 Noyepad not affiliated with microshaft in any way.</string>
 </resources>
