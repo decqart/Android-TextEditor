@@ -73,10 +73,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-    public void filePicker(boolean readOrWrite) {
+    void filePicker(boolean readOrWrite) {
         if (readOrWrite) {
             intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-            intent.setType("text/*");
+            intent.setType("*/*");
             intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
             intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
             mLaunchFilePicker.launch(intent);
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void read() {
+    void read() {
         try {
             InputStreamReader inputStreamReader = new InputStreamReader(getContentResolver().openInputStream(mFileUri));
             BufferedReader reader = new BufferedReader(inputStreamReader);
@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void write() {
+    void write() {
         try {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getContentResolver().openOutputStream(mFileUri));
             BufferedWriter writer = new BufferedWriter(outputStreamWriter);
