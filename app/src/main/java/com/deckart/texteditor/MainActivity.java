@@ -20,8 +20,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 public class MainActivity extends AppCompatActivity {
-    Uri mFileUri = null;
-    Intent intent;
     EditText edtTxt;
 
     @Override
@@ -39,20 +37,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        final int create_new = R.id.create_new;
-        final int open = R.id.open;
-        final int save = R.id.save;
         // Handle item selection
-        switch (item.getItemId()) {
-            case create_new:
-                edtTxt.getText().clear();
-                return true;
-            case open:
-                filePicker(true);
-                return true;
-            case save:
-                filePicker(false);
-                return true;
+        if (item.getItemId() == R.id.create_new) {
+            edtTxt.getText().clear();
+        } else if (item.getItemId() == R.id.open) {
+            filePicker(true);
+        } else if (item.getItemId() == R.id.save) {
+            filePicker(false);
         }
         return true;
     }
@@ -74,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
             });
 
     void filePicker(boolean readOrWrite) {
+        Intent intent;
         if (readOrWrite) {
             intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             intent.setType("*/*");
@@ -90,26 +82,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleFileResult(Intent data, boolean readOrWrite) {
-        mFileUri = data.getData();
+        Uri fileUri = data.getData();
 
-        if (mFileUri != null) {
+        if (fileUri != null) {
             try {
-                getContentResolver().takePersistableUriPermission(mFileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                getContentResolver().takePersistableUriPermission(fileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             } catch (SecurityException e) {
                 e.printStackTrace();
             }
 
             if (readOrWrite) {
-                read();
+                read(fileUri);
             } else {
-                write();
+                write(fileUri);
             }
         }
     }
 
-    void read() {
+    void read(Uri fileUri) {
         try {
-            InputStreamReader inputStreamReader = new InputStreamReader(getContentResolver().openInputStream(mFileUri));
+            InputStreamReader inputStreamReader = new InputStreamReader(getContentResolver().openInputStream(fileUri));
             BufferedReader reader = new BufferedReader(inputStreamReader);
             StringBuilder builder = new StringBuilder();
 
@@ -130,9 +122,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    void write() {
+    void write(Uri fileUri) {
         try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getContentResolver().openOutputStream(mFileUri));
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getContentResolver().openOutputStream(fileUri));
             BufferedWriter writer = new BufferedWriter(outputStreamWriter);
             String textContent = edtTxt.getText().toString();
 
